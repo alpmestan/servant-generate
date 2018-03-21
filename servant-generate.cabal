@@ -1,0 +1,25 @@
+name:                servant-generate
+version:             0.1
+synopsis:            Utilities for generating mock server implementations
+description:         Utilities for generating mock server implementations
+                     .
+                     See the documentation of the @Servant.Server.Generate@ module.
+homepage:            https://github.com/alpmestan/servant-generate
+license:             BSD3
+license-file:        LICENSE
+author:              Alp Mestanogullari
+maintainer:          alpmestan@gmail.com
+copyright:           2018 Alp Mestanogullari
+category:            Web
+build-type:          Simple
+extra-source-files:  ChangeLog.md
+cabal-version:       >=1.10
+
+library
+  exposed-modules:     Servant.Server.Generate
+  build-depends:       base >=4.7 && <5,
+                       servant >= 0.13 && <0.14,
+                       servant-server >= 0.13 && <0.14
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  ghc-options:         -Wall
