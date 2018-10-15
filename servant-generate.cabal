@@ -1,5 +1,6 @@
 name:                servant-generate
-version:             0.1
+version:             0.1.0.1
+
 synopsis:            Utilities for generating mock server implementations
 description:         Utilities for generating mock server implementations
                      .
@@ -15,7 +16,7 @@ category:            Web
 build-type:          Simple
 extra-source-files:  ChangeLog.md, README.md
 cabal-version:       >=1.10
-tested-with:         GHC == 8.0.2, GHC == 8.2.2
+tested-with:         GHC == 8.0.2, GHC == 8.2.2, GHC==8.4.4, GHC==8.6.1
 
 source-repository head
   type:     git
@@ -23,7 +24,7 @@ source-repository head
 
 library
   exposed-modules:     Servant.Server.Generate
-  build-depends:       base >=4.7 && <5,
+  build-depends:       base >=4.7 && <4.13,
                        servant >= 0.13 && <0.15,
                        servant-server >= 0.13 && <0.15
   hs-source-dirs:      src
