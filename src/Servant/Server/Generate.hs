@@ -27,8 +27,9 @@ import Data.Proxy
 import GHC.Exts
 import GHC.TypeLits
 import Servant.API
-import Servant.API.Internal.Test.ComprehensiveAPI
+import Servant.Test.ComprehensiveAPI
 import Servant.Server
+import Servant.Types.SourceT (SourceT, fromStepT, StepT (..))
 
 -- | A class that'll define the generated server using the supplied
 --   constraints and some function that takes a response type (through a 'Proxy')
@@ -101,6 +102,9 @@ instance (KnownSymbol s, GenerateServer api c) => GenerateServer (CaptureAll s a
 instance GenerateServer api c => GenerateServer (ReqBody' mods cts a :> api) c where
   generateServer _ c m f = \_ -> generateServer (Proxy @ api) c m f
 
+instance GenerateServer api c => GenerateServer (StreamBody' mods fr ct a :> api)  c where
+  generateServer _ c m f = \_ -> generateServer (Proxy @ api) c m f
+
 instance GenerateServer api c => GenerateServer (RemoteHost :> api) c where
   generateServer _ c m f = \_ -> generateServer (Proxy @ api) c m f
 
@@ -130,6 +134,9 @@ instance GenerateServer api c => GenerateServer (WithNamedContext name subContex
 
 -- | Requires all constraints in @cs@ to be satisfied by @a@.
 instance (KnownNat status, Flatten cs a) => GenerateServer (Verb (method :: StdMethod) (status :: Nat) (cts :: [*]) (a :: *)) cs where
+  generateServer _ _ _ f = f (Proxy @ a)
+
+instance (KnownNat status, Flatten cs a) => GenerateServer (Stream (method :: StdMethod) (status :: Nat) (fr :: *) (cts :: *) (a :: *)) cs where
   generateServer _ _ _ f = f (Proxy @ a)
 
 type family Flatten (cs :: [* -> Constraint]) (a :: *) :: Constraint where
@@ -174,6 +181,12 @@ instance A Int where
 
 instance A a => A (Headers '[] a) where
   getA _ = Headers (getA (Proxy :: Proxy a)) HNil
+
+instance A [a] where
+  getA _ = []
+
+instance A (SourceT m a) where
+  getA _ = fromStepT Stop
 
 instance (A t, A (Headers hs a))
       => A (Headers (Header h t ': hs) a) where
