@@ -16,7 +16,7 @@ category:            Web
 build-type:          Simple
 extra-source-files:  ChangeLog.md, README.md
 cabal-version:       >=1.10
-tested-with:         GHC == 8.0.2, GHC == 8.2.2, GHC==8.4.4, GHC==8.6.3
+tested-with:         GHC == 8.0.2, GHC == 8.2.2, GHC==8.4.4, GHC==8.6.5, GHC==8.8.1
 
 source-repository head
   type:     git
@@ -24,7 +24,7 @@ source-repository head
 
 library
   exposed-modules:     Servant.Server.Generate
-  build-depends:       base           >= 4.9  && <4.13,
+  build-depends:       base           >= 4.9  && <4.14,
                        servant        >= 0.15 && <0.17,
                        servant-server >= 0.15 && <0.17
   hs-source-dirs:      src
