@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TypeFamilies #-}
@@ -135,6 +136,11 @@ instance GenerateServer api c => GenerateServer (WithNamedContext name subContex
 -- | Requires all constraints in @cs@ to be satisfied by @a@.
 instance (KnownNat status, Flatten cs a) => GenerateServer (Verb (method :: StdMethod) (status :: Nat) (cts :: [*]) (a :: *)) cs where
   generateServer _ _ _ f = f (Proxy @ a)
+
+#if MIN_VERSION_servant(0,17,0)
+instance Flatten cs NoContent => GenerateServer (NoContentVerb (method :: StdMethod)) cs where
+  generateServer _ _ _ f = f (Proxy @ NoContent)
+#endif
 
 instance (KnownNat status, Flatten cs a) => GenerateServer (Stream (method :: StdMethod) (status :: Nat) (fr :: *) (cts :: *) (a :: *)) cs where
   generateServer _ _ _ f = f (Proxy @ a)
